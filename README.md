@@ -1,5 +1,5 @@
 # Automate-The-Boring-Stuff-Exercises
-A repository containing all of my code from the exercises in Al Sweigart's book Automate the Boring Stuff With Python
+A repository containing all of my code from the exercises in Al Sweigart's book, Automate the Boring Stuff With Python.
 
 A big thank you to the author for the resources contained in his book. A link to the free ebook and can be found here: https://automatetheboringstuff.com/ 
 The book can also be purchased from No Starch Press: https://nostarch.com/automatestuff2
