@@ -1,3 +1,6 @@
+
+
+    
 #receive a list and return a string value
 #with all items separated by commas, and
 #the word "and" before the last item. Must
@@ -20,5 +23,11 @@ def addCommasToList(listToConvert):
     print(string)
     return string
     
-testList = ['salad', 'potato', 'soup']    
+testList = ['salad', 'potato', 'soup']  
+testList2 = []
+testList3 = [1]
+testList4 = [1,2]
 addCommasToList(testList)
+addCommasToList(testList2)
+addCommasToList(testList3)
+addCommasToList(testList4)
