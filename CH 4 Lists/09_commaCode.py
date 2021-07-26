@@ -1,6 +1,3 @@
-
-
-    
 #receive a list and return a string value
 #with all items separated by commas, and
 #the word "and" before the last item. Must
