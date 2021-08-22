@@ -9,7 +9,7 @@
 # nested for loop, j iterates first, thereby printing
 # the list at index 0, a.k.a. the first list. When j 
 # is finished iterating, i increments from 0 to 1, thereby
-# printing all values inside the second list.
+# printing all values inside the second list and so on.
 
 grid = [['.', '.', '.', '.', '.', '.'],
         ['.', 'O', 'O', '.', '.', '.'],
