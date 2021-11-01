@@ -5,19 +5,19 @@
 # values. Function returns a message if the list 
 # contains no items. 
 
-def listToString(list):
+def list_to_string(list):
     if list == []:
         print('List must contain items.')
-    newString = ''
+    new_string = ''
     for i in list:
         if list.index(i) == len(list)-1:
-            newString += 'and ' + i
+            new_string += 'and ' + i
         else:
-            newString += i + ', '
-        print(newString)
-    return newString
+            new_string += i + ', '
+        print(new_string)
+    return new_string
     
 spam = ['apples','bananas','tofu','cats']
 spam2 = []
-listToString(spam)
-listToString(spam2)
+list_to_string(spam)
+list_to_string(spam2)
