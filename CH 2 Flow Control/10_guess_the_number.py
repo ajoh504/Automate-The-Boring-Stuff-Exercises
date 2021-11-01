@@ -5,19 +5,19 @@
 # only has six tries to guess the number
 
 import random
-secretNumber = random.randint(1,20)
+secret_number = random.randint(1,20)
 print('I am thinking of a number between 1 and 20.')
 # Ask the player to guess 6 times
-for guessesTaken in range (1,7):
+for guesses_taken in range (1,7):
     print('Take a guess.')
     guess = int(input())
-    if guess < secretNumber:
+    if guess < secret_number:
         print('Your guess is too low.')
-    elif guess > secretNumber:
+    elif guess > secret_number:
         print('Your guess is too high.')
     else:
         break # the condition is the correct guess!
-if guess == secretNumber:
-    print('Good job! You guessed me number in ' + str(guessesTaken) + ' guesses!')
+if guess == secret_number:
+    print('Good job! You guessed me number in ' + str(guesses_taken) + ' guesses!')
 else:
-    print('Nope, the number I was thinking of was ' + str(secretNumber))
+    print('Nope, the number I was thinking of was ' + str(secret_number))
