@@ -3,7 +3,7 @@
 # The arrow must be pointing down.
 
 
-def printArrowDown():
+def print_arrow_down():
   grid =[['.', '.', '.', '.', '.', '.'],
          ['.', 'O', 'O', '.', '.', '.'],
          ['O', 'O', 'O', 'O', '.', '.'],
@@ -19,4 +19,4 @@ def printArrowDown():
       print(grid[j][i], end='')
     print('\n')
 
-printArrowDown()
+print_arrow_down()
