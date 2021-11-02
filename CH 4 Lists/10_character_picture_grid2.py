@@ -19,7 +19,7 @@ ROW_LENGTH = len(RIGHT_ARROW[0])  # length of x plane coordinates
 COLUMN_LENGTH = len(RIGHT_ARROW)  # length of y plane coordinates
 SEPARATOR = "     " # empty space keeps arrow's shape when it's printed to the console. 
 
-def main():  # main program
+def arrow_pointer() -> None:  # main program
     print("Welcome to Arrow Pointer v1.0!")
     while True:
         print(
@@ -33,7 +33,6 @@ def main():  # main program
                     # first loop iterates through RIGHT_ARROW elements
                     # nested loop iterates through inner list elements
                     print(RIGHT_ARROW[i][j] + SEPARATOR, end="")
-                    # empty space to keep the arrow's shape when it's printed to the console
                 print("\n")
 
         if user_input.lower() == "left":
@@ -60,4 +59,4 @@ def main():  # main program
 
 
 if __name__ == "__main__":
-    main()
+    arrow_pointer()
