@@ -47,8 +47,7 @@ def main() -> None:  # main program prints instructions and accepts user input
         print(
             "\n\nType in one of the following:\n\nup, down, left, right, or end to exit the program."
         )
-        user_input = input()
-        # user determines direction of arrow to be printed
+        user_input = input()  # user determines direction of arrow to be printed
         if user_input.lower() == "right":
             _print_arrow_left_right(
                 0, ROW_LENGTH, 1, 0, COLUMN_LENGTH, 1
@@ -65,7 +64,7 @@ def main() -> None:  # main program prints instructions and accepts user input
             )  # print pointing down
 
         if user_input.lower() == "up":
-            _print_arrow_up_down(ROW_LENGTH - 1, -1, -1, 0, COLUMN_LENGTH, 1)  # up
+            _print_arrow_up_down(ROW_LENGTH - 1, -1, -1, 0, COLUMN_LENGTH, 1)
 
         if user_input.lower() == "end":
             return
