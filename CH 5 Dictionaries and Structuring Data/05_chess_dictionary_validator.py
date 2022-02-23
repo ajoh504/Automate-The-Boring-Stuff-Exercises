@@ -8,8 +8,8 @@ Function searches for five criteria:
 1 Board contains 64 squares
 2 Board squares are a1 through h8
 3 Sum of pawn, rook, queen, bishop, and knight <= 15
-4 No more than 1 king per color
-5 No more than 8 pawns per color
+4 No more than 8 pawns per color
+5 No more than 1 king per color
 
 """
 chess_board = {
@@ -83,9 +83,7 @@ chess_board = {
 def is_valid_chess_board(board: dict) -> bool:
     is_valid = True  # final return value, change to False if board not valid
     board_squares = list(board.keys())  # store board squares in list
-    temp_list = list(
-        board.values()
-    )  # temp list for chess pieces, will remove empty strings
+    temp_list = list(board.values())  # temporary list for storing chess pieces, will remove empty strings from this list
     board_pieces = []  # new list after removing empty strings
     bpawn = 0
     brook = 0
@@ -116,9 +114,7 @@ def is_valid_chess_board(board: dict) -> bool:
         nums = ["1", "2", "3", "4", "5", "6", "7", "8"]
         if i[0] not in letters or i[1] not in nums:
             is_valid = False
-            print(
-                "Format error. Check format of board squares. Board must have 64 squares, a1 through h8."
-            )
+            print("Format error. Check format of board squares. Board must have 64 squares, a1 through h8.")
 
     # count pieces
     for i in board_pieces:
@@ -153,12 +149,17 @@ def is_valid_chess_board(board: dict) -> bool:
     # sum of pawns, rooks, knights, queens, bishops must be <= 15
     if (bpawn + bbishop + brook + bknight + bqueen) > 15:
         is_valid = False
-        print("Invalid piece count")
+        print("Invalid piece count.")
     if (wpawn + wbishop + wrook + wknight + wqueen) > 15:
         is_valid = False
-        print("Invalid piece count")
+        print("Invalid piece count.")
 
-    # check for exactly 1 black king and 1 white king
+    # check for no more than 8 pawns per color
+    if (bpawn > 8) or (wpawn > 8):
+        is_valid = False
+        print("Invalid pawn count.")      
+
+    # check for no more than 1 king per color
     white_king = 0
     black_king = 0
     for i in board_pieces:
@@ -168,19 +169,7 @@ def is_valid_chess_board(board: dict) -> bool:
             black_king += 1
     if (white_king > 1) or (black_king > 1):
         is_valid = False
-        print("Board must have exactly one king per color.")
-
-    # check that the board contains no more than 8 pawns per color
-    black_pawns = 0
-    white_pawns = 0
-    for i in board_pieces:
-        if i == "wpawn":
-            white_pawns += 1
-        if i == "bpawn":
-            black_pawns += 1
-    if (black_pawns > 8) or (white_pawns > 8):
-        is_valid = False
-        print("Board cannot contain more than eight pawns per color.")
+        print("Invalid king count.")
 
     print(is_valid)
     return is_valid
