@@ -1,7 +1,7 @@
 """
 Create game bots that use different roll strategies to play the zombie dice game. The game rules are contained in the my_zombie class.
     
-    My classes are as follows. Other other code was provided in the text:
+    My classes are as follows. Other example classes were provided in the text:
     
     my_zombie(name="My Zombie Bot"),
     random_roll_bot(name="Random Roll Bot"),
