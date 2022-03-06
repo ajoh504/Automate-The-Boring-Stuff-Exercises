@@ -8,6 +8,8 @@ Create game bots that use different roll strategies to play the zombie dice game
     two_shotguns_bot(name="Stop at 2 shotguns"),
     one_to_four_bot(name="One to four rolls"),
     guns_beat_brains_bot(name="Guns beat brains"
+    
+    The only code sections that I wrote are the "roll strategy" sections. All other code was provided in the text. 
 """
 import zombiedice, random
 
