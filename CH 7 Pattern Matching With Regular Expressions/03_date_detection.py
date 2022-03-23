@@ -1,8 +1,10 @@
+
 # date regex: dd/mm/yyyy
 
 import re
 
 def regex_date_validator(date: str) -> bool:
+    print('Please enter a date in the following format: dd/mm/yyyy')
     valid = True # final return value, change to false if date not valid
     is_leap_year = False # 
     date_regex = re.compile(r'''
@@ -35,8 +37,10 @@ def regex_date_validator(date: str) -> bool:
     # divisible by 100, must also be divisible by 400
     if year % 4 == 0:
         is_leap_year = True
-        if year % 100 and year % 400:
+        if year % 100 == 0 and year % 400 == 0:
             is_leap_year = True
+        elif year % 100 == 0 and year % 400 != 0:
+            is_leap_year = False
         else:
             is_leap_year = False
             print('Error: leap year millenium must be divisible by 400')
@@ -59,8 +63,10 @@ def regex_date_validator(date: str) -> bool:
     return valid
 
 print('Please enter a date in the following format: dd/mm/yyyy')
-user_input = str(input())
-regex_date_validator(user_input)
-
+while True:
+    regex_date_validator(str(input()))
     
-    
+'''if regex_date_validator(str(input())) == False:
+    regex_date_validator(str(input()))
+else:
+    quit();'''
