@@ -1,20 +1,16 @@
 import re
 
-# required argument is user's password
-def pw_strength_check(user_pw: str) -> bool:
+def password_strength_test(password):
     
-          
-    # check for any length number, any lenght lowercase letters
-    #pw_regex = re.compile(r'(\d*)([a-z]*)')
-    pw_regex = re.compile(r'(.)')
-    regex_groups = pw_regex.findall(password)
-    #store match object and groups in variables
-    #match_object = pw_regex.search(user_pw)
-    #regex_groups = match_object.groups()
-    print(regex_groups)
-
+    lowercase_regex = re.compile(r'[a-z]')
+    uppercase_regex = re.compile(r'[A-Z]')
+    number_regex = re.compile(r'\d')
+    
+    lowercase_groups = lowercase_regex.findall(password)
+    uppercase_groups = uppercase_regex.findall(password)
+    number_groups = number_regex.findall(password)
+    print(lowercase_groups, uppercase_groups, number_groups)
+    #print(regex.findall(str_test))
 
 while True:
-    print('Please enter your password:')
-    password = input()
-    pw_strength_check(password)
+    password_strength_test(str(input()))
