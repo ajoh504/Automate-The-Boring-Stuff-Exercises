@@ -7,3 +7,4 @@ As listed on the [author's website](https://inventwithpython.com/), the book is 
 
 I submitted some of my code in the Code Review section on Stack Exchange, listed as follows: 
 1. An [expanded version](https://github.com/ajoh504/Automate-The-Boring-Stuff-Exercises/blob/main/CH%204%20Lists/10_characterPictureGrid2.py) of the Character Picture Grid problem from Ch. 4. See the code review [here](https://codereview.stackexchange.com/questions/267666/expanding-on-a-problem-from-automate-the-boring-stuff).
+2. [Password strength checker](https://github.com/ajoh504/Automate-The-Boring-Stuff-Exercises/blob/main/CH%207%20Pattern%20Matching%20With%20Regular%20Expressions/04_password_strengh.py) from Ch. 7. See the code review [here](https://codereview.stackexchange.com/questions/275268/automate-the-boring-stuff-ch-7-password-strength-test)
