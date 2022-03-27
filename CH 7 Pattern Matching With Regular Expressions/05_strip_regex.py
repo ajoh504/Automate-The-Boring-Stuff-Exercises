@@ -1,15 +1,28 @@
-'''Write a function that takes a string and does the same thing as the strip()
-string method. If no other arguments are passed other than the string to strip,
-then whitespace characters will be removed from the beginning and end of the
-string.Otherwise, the characters specified in the second argument to the
-function will be removed from the string.'''
+from re import findall
 
-def regex_strip(str1, str2):
-    # receive string argument to edit, and string argument to remove.
-    # If no string to remove is provided, remove whitespace characters. 
-    str_to_edit = str1
-    str_to_remove = str2
+# str1 is string to strip
+# str2 is optional string to remove from str1
+def regex_strip_method(str1, str2=''): 
+    stripped_str = '' # final return value
 
-string = 'Hello, world!'
+    # if str2 is not given, remove whitespace from beginning and end
+    if str2 == '':
+        regex_list = findall(r'\S*', str1)
+        while '' in regex_list:
+            regex_list.remove('')
+        stripped_str = ' '.join(regex_list)
 
-regex_strip(string)
+    # remove empty strings from regex_list
+    if str2 != '':
+        regex_list = findall(r'\S*', str1)
+        while '' in regex_list:
+            regex_list.remove('')
+
+        # remove str2 from beginning and end of str1    
+        if str2 in regex_list[0]:
+            regex_list[0] = regex_list[0].replace(str2, '')
+        if str2 == regex_list[-1]:
+            regex_list[-1] = regex_list[-1].replace(str2, '')
+        stripped_str = ' '.join(regex_list)
+    
+    return stripped_str
