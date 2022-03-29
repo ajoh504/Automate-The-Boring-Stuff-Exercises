@@ -1,28 +1,21 @@
-from re import findall
+import re
 
-# str1 is string to strip
-# str2 is optional string to remove from str1
-def regex_strip_method(str1, str2=''): 
-    stripped_str = '' # final return value
-
-    # if str2 is not given, remove whitespace from beginning and end
+# receive string argument to modify (str1), and string argument to
+# remove (str2). If str2 is not provided, remove whitespace characters. 
+def regex_strip(str1, str2=''):
     if str2 == '':
-        regex_list = findall(r'\S*', str1)
+        regex = re.compile(r'\S*')
+        regex_list = regex.findall(str1)
         while '' in regex_list:
             regex_list.remove('')
-        stripped_str = ' '.join(regex_list)
+        return ' '.join(regex_list)
+    else:
+        regex = re.compile(r'[^'+str2+'].*[^'+str2+']')
+        mo = regex.search(str1)
+        return mo.group()
 
-    # remove empty strings from regex_list
-    if str2 != '':
-        regex_list = findall(r'\S*', str1)
-        while '' in regex_list:
-            regex_list.remove('')
+string1 = 'Hello, world!'
+string2 = 'olleH'
 
-        # remove str2 from beginning and end of str1    
-        if str2 in regex_list[0]:
-            regex_list[0] = regex_list[0].replace(str2, '')
-        if str2 == regex_list[-1]:
-            regex_list[-1] = regex_list[-1].replace(str2, '')
-        stripped_str = ' '.join(regex_list)
-    
-    return stripped_str
+print(regex_strip(string1, string2))
+
