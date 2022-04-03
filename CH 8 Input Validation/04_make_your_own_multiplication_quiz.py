@@ -1,38 +1,56 @@
 #! python3
 # Make your own multiplication quiz
-# INCOMPLETE, needs 8 second timer
-import time, random, re
+
+import time, random, re, threading
 
 number_of_questions = 10
 correct_answers = 0
+
+# The first for loop determines the number of questions to ask
 for question_number in range(number_of_questions):
-    # Pick two random numbers
-    num1 = random.randint(0, 9)
-    num2 = random.randint(0, 9)
-    # regex forces answer to be a digit
-    regex = re.compile(r'^\d+$') 
-    prompt = 'Question #%s: %s x %s = ' % (question_number, num1, num2)
-    # 3 tries per question
-    for attempt in range(0, 3): 
-        answer = str(input(prompt))
+    if question_number != 0: # Don't show score on first question
+        time.sleep(1) # Brief pause to let user see the result
+        print('Score: %s / %s' % (correct_answers, number_of_questions))
+    num1 = random.randint(0, 9) # random number 1
+    num2 = random.randint(0, 9) # random number 2
+    regex = re.compile(r'^\d+$') #  regex that requires a digit
+    prompt = 'Question #%s: %s x %s = ' % (question_number, num1, num2) # prompt is the question to ask the user
+    # The second for loop allows only 3 attempts per question
+    for attempt in range(0, 3):
+        # create a switch and a timeout function that flips the switch
+        timeout_switch = False
+        def timeout():
+            global timeout_switch
+            timeout_switch = True
+        eight_seconds = threading.Timer(8, timeout) # timeout switch is flipped if timer reaches 0
+        eight_seconds.start()  # start timer
+        answer = str(input(prompt)) # convert user's answer to string in order to pass it into regex
         mo = regex.search(answer)
-        if mo == None:
+        if timeout_switch == True:
+            print('Out of time!')
+            break
+        # mo == None helps avoid an AttributeError because mo.group()
+        # will throw an error if a non-digit is entered by the user
+        elif (mo == None) and (timeout_switch == False):
+            eight_seconds.cancel()
             print('Incorrect')
-            # if final try is incorrect, print 'out of tries'
             if attempt == 2:
                 print('Out of tries!')
             continue
-        elif int(mo.group()) != (num1 * num2):
+        elif (int(mo.group()) != (num1 * num2)) and (timeout_switch == False):
+            eight_seconds.cancel()
             print('Incorrect!')
-            # if final try is incorrect, print 'out of tries'
             if attempt == 2:
                 print('Out of tries!')
             continue
         else:
+            eight_seconds.cancel()
             correct_answers += 1
-            print('Correct!')
+            print('Correct!')          
             break
 
 time.sleep(1) # Brief pause to let user see the result
 print('Score: %s / %s' % (correct_answers, number_of_questions))
+
+
             
