@@ -1,1 +1,1 @@
-@pyw.exe  '<add filepath for 02-mcb.pyw>' %*
+@pyw.exe  <add filepath for 02-mcb.pyw> %*
