@@ -1,1 +1,3 @@
-@pyw.exe  <add filepath for 02-mcb.pyw> %*
+@ECHO OFF
+@py.exe "file path for 02-mcb.pyw" %*
+PAUSE
