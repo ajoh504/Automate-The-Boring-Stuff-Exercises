@@ -6,14 +6,11 @@ from pathlib import Path
 
 def madlibs():
     print('-- Welcome to Mad Libs! ---')
-    print('Please enter an adjective:')
-    adjective = input()
-    print('Please enter a noun:')
-    noun1 = input()
+    adjective = input('Please enter an adjective:')
+    noun1 = input('Please enter a noun:')
     print('Please enter a verb:')
     verb = input()
-    print('Please enter another noun:')
-    noun2 = input()
+    noun2 = input('Please enter another noun:')
     madlibs_text = f'''
     The {adjective} panda walked to the
     {noun1} and then {verb}. A nearby {noun2}
