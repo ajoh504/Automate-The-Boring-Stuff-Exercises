@@ -19,3 +19,4 @@ string2 = 'olleH'
 
 print(regex_strip(string1, string2))
 
+# Source used for help: https://gist.github.com/johnmccormick/0b74fd6c544b47a8da3d812e80197ded
