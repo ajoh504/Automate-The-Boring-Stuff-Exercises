@@ -1,15 +1,17 @@
 #! python3
-# 04_password_strength.py -- function to test the strength of a password
-# password must contain at least 1 upper case letter, 1 lower case letter,
+# 04_password_strength.py -- function to test the strength of a password password must contain at least 1 upper case letter, 1 lower case letter,
 # 1 number, and be greater than or equal to 8 characters
+#
+# changes were made based on the code review at stack exchange: https://codereview.stackexchange.com/questions/275268/automate-the-boring-stuff-ch-7-password-strength-test
+#
+#
 
 import re
 
 # pw = password
 # function receives user input (password) as argument
 def pw_strength_test(pw: str) -> bool:
-    is_strong = True # final return value, change to False if test fails
-    
+
     # lowercase, uppercase, and number regexes
     lower_regex = re.compile(r"[a-z]")
     upper_regex = re.compile(r"[A-Z]")
