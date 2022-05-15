@@ -2,9 +2,8 @@
 # 04_password_strength.py -- function to test the strength of a password password must contain at least 1 upper case letter, 1 lower case letter,
 # 1 number, and be greater than or equal to 8 characters
 #
-# changes were made based on the code review at stack exchange: https://codereview.stackexchange.com/questions/275268/automate-the-boring-stuff-ch-7-password-strength-test
-#
-#
+# changes were made based on feedback from the Code Review community on Stack Exchange: 
+# https://codereview.stackexchange.com/questions/275268/automate-the-boring-stuff-ch-7-password-strength-test
 
 import re
 
