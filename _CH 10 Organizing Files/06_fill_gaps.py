@@ -72,12 +72,8 @@ class rename_gapped_files:
 
 def main() -> None:
     while True:
-        directory = Path(
-            r"C:\Users\Buzzkill\test_source"
-        )  # input("Please enter a directory to search for files\n")
-        prefix = (
-            "spam000"  # input("Please enter a prefix to search for, such as spam000\n")
-        )
+        directory = Path(input("Please enter a directory to search for files\n"))
+        prefix = (input("Please enter a prefix to search for, such as spam000\n"))
         os.chdir(directory)
         rename = rename_gapped_files(directory, prefix)
         match_object = rename.return_match_object(prefix)
