@@ -7,6 +7,8 @@
 #
 # usage -- user will be prompted for 1. filepath 2. file prefix, such as 'spam'
 #          if user selects insert gaps, must supply start and end point for gaps
+#
+# changes made based on Code Review: https://codereview.stackexchange.com/questions/276401/automate-the-boring-stuff-ch-10-filling-in-the-gaps
 
 
 from pathlib import Path
