@@ -32,8 +32,14 @@ class commandLineEmailer:
         return re.compile("(.*\@)(.*)(\.)").match(sys.argv[1]).group(2)
 
     # todo: open browser session and navigate to email client
-    def open_browser_session(self) -> None:
-        pass
+    def go_to_email_client(self) -> None:
+        EMAIL_CLIENTS = {
+            'outlook': 'https://www.outlook.com/',
+            'gmail': 'https://www.gmail.com/',
+            'yahoo': 'https://yahoomail.com/'
+        }
+        browser = webdriver.Firefox()
+        browser.get(EMAIL_CLIENTS[self.return_email_client()])
 
     # todo: find username attribute
 
@@ -52,6 +58,7 @@ class commandLineEmailer:
 
 def main():
     command_line_emailer = commandLineEmailer()
+    command_line_emailer.go_to_email_client()
     logging.info(command_line_emailer.return_email_client())
     logging.info(str(type(command_line_emailer.return_email_client())))
 
