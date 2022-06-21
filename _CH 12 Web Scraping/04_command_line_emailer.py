@@ -1,16 +1,16 @@
 #!python3
-''' 
+'''
 04_command_line_emailer.py -- send emails from the command line
 usage: input four command line arguments:
-1. email to log into = sys.argv[1]
-2. password = sys.argv[2]
-3. email body = sys.argv[3]
-4. recipient email adddress = sys.argv[4]
+1. sys.argv[1] = email to log into
+2. sys.argv[2] = password
+3. sys.argv[3] = email body
+4. sys.argv[4] = recipient email adddres
 '''
 
+from selenium import webdriver
 import sys
 import re
-import selenium
 import logging
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
 logging.info('Program start')
@@ -31,16 +31,29 @@ class commandLineEmailer:
         '''
         return re.compile("(.*\@)(.*)(\.)").match(sys.argv[1]).group(2)
 
-    # todo: open Firefox session
+    # todo: open browser session and navigate to email client
+    def open_browser_session(self) -> None:
+        pass
+
+    # todo: find username attribute
+
+    # todo: find password attribute
 
     # todo: log into email client
 
-    # todo:
-    
+    # todo: find new message attribute
+
+    # todo: find "to:" attribute and submit sending address
+
+    # todo: find message attribute and submit email body
+
+    # todo: send email
+
+
 def main():
     command_line_emailer = commandLineEmailer()
     logging.info(command_line_emailer.return_email_client())
     logging.info(str(type(command_line_emailer.return_email_client())))
-    
+
 if __name__ == "__main__":
     main()
