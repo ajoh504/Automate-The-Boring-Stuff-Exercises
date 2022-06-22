@@ -1,14 +1,14 @@
 #!python3
-'''
-04_command_line_emailer.py -- send emails from the command line
-usage: input four command line arguments:
-1. sys.argv[1] = email to log into
-2. sys.argv[2] = password
-3. sys.argv[3] = email body
-4. sys.argv[4] = recipient email adddres
-'''
+# 04_command_line_emailer.py -- send emails from the command line
+# usage: input four command line arguments:
+# 1. sys.argv[1] = email to log into
+# 2. sys.argv[2] = password
+# 3. sys.argv[3] = email body
+# 4. sys.argv[4] = recipient email address
+
 
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 import sys
 import re
 import logging
@@ -19,19 +19,19 @@ class commandLineEmailer:
     def __init__(self):
         pass
 
-    # todo: return the name of the email client for the sending address
-    def return_email_client(self) -> str:
+    # return the name of the email client for the sending address
+    # todo: only return necessary data
+    def return_email_info(self) -> tuple:
         '''
-        pass sending email into regex (sys.argv[1])
-        regex pattern creates three groups:
-        group 1 stops at "@"
-        group 2 finds the email client name
-        group 3 begins at "."
-        :return: name of email client from regex group 2
+        Input sys.argv[1] into regex. sys.argv[1] contains the sending email
+        address. The regex pattern creates four groups: group at index 0 
+        contains username, group at index 2 contains email client name
+        
+        :return: email address separated into tuple
         '''
-        return re.compile("(.*\@)(.*)(\.)").match(sys.argv[1]).group(2)
+        return re.compile("(.*)(\@)(.*)(\.)").match(sys.argv[1]).groups()
 
-    # todo: open browser session and navigate to email client
+    # open browser session and navigate to email client
     def go_to_email_client(self) -> None:
         EMAIL_CLIENTS = {
             'outlook': 'https://www.outlook.com/',
@@ -39,13 +39,17 @@ class commandLineEmailer:
             'yahoo': 'https://yahoomail.com/'
         }
         browser = webdriver.Firefox()
-        browser.get(EMAIL_CLIENTS[self.return_email_client()])
+        browser.get(EMAIL_CLIENTS[self.return_email_client()[2]])
 
-    # todo: find username attribute
+    # sign into email client and input username / password
+    def sign_in(self):
+        if self.return_email_client() == 'yahoo':
+            browser.find_element(By.CLASS_NAME, 'signin').click()
+            # todo: find username attribute
 
-    # todo: find password attribute
+            # todo: find password attribute
 
-    # todo: log into email client
+            # todo: log into email client
 
     # todo: find new message attribute
 
