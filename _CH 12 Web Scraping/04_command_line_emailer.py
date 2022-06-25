@@ -12,7 +12,6 @@ from selenium.webdriver.common.by import By
 import sys
 import re
 import logging
-
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
 logging.info('Program start')
 
@@ -40,31 +39,56 @@ class commandLineEmailer:
         }
         self.browser.get(EMAIL_CLIENTS[self.return_email_info()[1]])
 
+    def sign_into_gmail(self) -> None:
+        pass
+
+    def sign_into_outlook(self) -> None:
+        pass
+
+    def sign_into_yahoo(self) -> None: # yahoomail signin method
+        self.browser.find_element(By.CLASS_NAME, 'signin').click()
+        self.browser.find_element(By.NAME, 'username').send_keys(self.return_email_info()[0])
+        self.browser.find_element(By.NAME, 'signin').click()
+        self.browser.find_element(By.NAME, 'password').send_keys(sys.argv[2])
+        self.browser.find_element(By.NAME, 'verifyPassword').click()
+
     # sign into email client and input username / password
-    def sign_in(self):
-        if self.return_email_info()[1] == 'yahoo':
-            self.browser.find_element(By.CLASS_NAME, 'signin').click()
-            self.browser.find_element(By.NAME, 'username').send_keys(self.return_email_info()[0])
-            self.browser.find_element(By.NAME, 'signin').click()
-            self.browser.find_element(By.NAME, 'password').send_keys(sys.argv[2])
-            self.browser.find_element(By.NAME, 'verifyPassword').click()
-            # check for alt email / alt phone number confirmation page
-            if self.browser.find_element(By.NAME, 'confirmCommChannels').is_displayed():
-                self.browser.find_element(By.NAME, 'confirmCommChannels').click()
+    def sign_in(self) -> None:
+        if self.return_email_info()[1] == 'gmail':
+            self.sign_into_gmail()
+        elif self.return_email_info()[1] == 'outlook':
+            self.sign_into_outlook()
+        elif self.return_email_info()[1] == 'yahoo':
+            self.sign_into_yahoo()
+
+    def send_from_gmail(self) -> None:
+        pass
+
+    def send_from_outlook(self) -> None:
+        pass
 
     # todo: find new message attribute
+    def send_from_yahoo(self) -> None:
+        self.browser.find_element(By.CSS_SELECTOR, '/d/compose/').click()
 
     # todo: find "to:" attribute and submit sending address
 
     # todo: find message attribute and submit email body
 
     # todo: send email
+    def send_email(self) -> None:
+        if self.return_email_info()[1] == 'gmail':
+            self.send_from_gmail()
+        elif self.return_email_info()[1] == 'outlook':
+            self.send_from_outlook()
+        elif self.return_email_info()[1] == 'yahoo':
+            self.send_from_yahoo()
 
-
-def main():
+def main() -> None:
     command_line_emailer = commandLineEmailer()
     command_line_emailer.go_to_email_client()
     command_line_emailer.sign_in()
+    command_line_emailer.send_email()
 
 if __name__ == "__main__":
     main()
