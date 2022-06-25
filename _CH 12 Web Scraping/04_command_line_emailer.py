@@ -11,6 +11,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import sys
 import re
+import time
 import logging
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
 logging.info('Program start')
@@ -39,6 +40,20 @@ class commandLineEmailer:
         }
         self.browser.get(EMAIL_CLIENTS[self.return_email_info()[1]])
 
+    def exception_loop(self, selenium_method) -> None:
+        '''
+        :param selenium_method: input method calls to search for html elements.
+        Wait five seconds between each method call.
+        :return: None
+        '''
+        while True:
+            try:
+                time.sleep(5) # wait five seconds
+                selenium_method
+                break
+            except selenium.common.exceptions.NoSuchElementException:
+                continue
+
     def sign_into_gmail(self) -> None:
         pass
 
@@ -46,11 +61,11 @@ class commandLineEmailer:
         pass
 
     def sign_into_yahoo(self) -> None: # yahoomail signin method
-        self.browser.find_element(By.CLASS_NAME, 'signin').click()
-        self.browser.find_element(By.NAME, 'username').send_keys(self.return_email_info()[0])
-        self.browser.find_element(By.NAME, 'signin').click()
-        self.browser.find_element(By.NAME, 'password').send_keys(sys.argv[2])
-        self.browser.find_element(By.NAME, 'verifyPassword').click()
+        self.exception_loop(self.browser.find_element(By.CLASS_NAME, 'signin').click())
+        self.exception_loop(self.browser.find_element(By.NAME, 'username').send_keys(self.return_email_info()[0]))
+        self.exception_loop(self.browser.find_element(By.NAME, 'signin').click())
+        self.exception_loop(self.browser.find_element(By.NAME, 'password').send_keys(sys.argv[2]))
+        self.exception_loop(self.browser.find_element(By.NAME, 'verifyPassword').click())
 
     # sign into email client and input username / password
     def sign_in(self) -> None:
