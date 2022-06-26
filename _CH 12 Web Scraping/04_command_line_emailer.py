@@ -5,10 +5,13 @@
 # sys.argv[2] = password
 # sys.argv[3] = email body
 # sys.argv[4] = recipient email address
+#
+# incomplete! see todo:
 
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 import sys
 import re
 import time
@@ -17,9 +20,21 @@ logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -
 logging.info('Program start')
 
 
+# todo: write method calls for gmail and outlook / finish method calls for yahoo
 class commandLineEmailer:
     def __init__(self):
+
         self.browser = webdriver.Firefox()
+        self.gmail_method_calls = ()
+        self.outlook_method_calls = ()
+        self.yahoo_method_calls = (
+            lambda: self.browser.find_element(By.CLASS_NAME, 'signin').click(),
+            lambda: self.browser.find_element(By.NAME, 'username').send_keys(self.return_email_info()[0]),
+            lambda: self.browser.find_element(By.NAME, 'signin').click(),
+            lambda: self.browser.find_element(By.NAME, 'password').send_keys(sys.argv[2]),
+            lambda: self.browser.find_element(By.NAME, 'verifyPassword').click(),
+            lambda: self.browser.find_element(By.CSS_SELECTOR, 'Compose').click()
+        )
 
     def return_email_info(self) -> tuple:
         '''
@@ -40,70 +55,40 @@ class commandLineEmailer:
         }
         self.browser.get(EMAIL_CLIENTS[self.return_email_info()[1]])
 
-    def exception_loop(self, selenium_method) -> None:
+    def selenium_exception_loop(self, selenium_method_collection) -> None:
         '''
-        :param selenium_method: input method calls to search for html elements.
-        Wait five seconds between each method call.
+        :param selenium_method_collection: input collection containing selenium
+         method calls to search for html elements. Wait two seconds between each
+         method call. Except the NoSuchElementException error.
         :return: None
         '''
-        while True:
-            try:
-                time.sleep(5) # wait five seconds
-                selenium_method
-                break
-            except selenium.common.exceptions.NoSuchElementException:
-                continue
+        for selenium_method_call in selenium_method_collection:
+            while True:
+                try:
+                    time.sleep(2) # wait two seconds
+                    selenium_method_call() # invoke lambda functions
+                    break
+                except NoSuchElementException:
+                    continue
 
-    def sign_into_gmail(self) -> None:
-        pass
-
-    def sign_into_outlook(self) -> None:
-        pass
-
-    def sign_into_yahoo(self) -> None: # yahoomail signin method
-        self.exception_loop(self.browser.find_element(By.CLASS_NAME, 'signin').click())
-        self.exception_loop(self.browser.find_element(By.NAME, 'username').send_keys(self.return_email_info()[0]))
-        self.exception_loop(self.browser.find_element(By.NAME, 'signin').click())
-        self.exception_loop(self.browser.find_element(By.NAME, 'password').send_keys(sys.argv[2]))
-        self.exception_loop(self.browser.find_element(By.NAME, 'verifyPassword').click())
-
-    # sign into email client and input username / password
-    def sign_in(self) -> None:
+    def sign_in_and_send(self) -> None:
+        '''
+        Retrieve the email client to log into. Call the selenium_exception_loop()
+        function and pass it the email client tuple containing the selenium
+        method calls
+        :return None:
+        '''
         if self.return_email_info()[1] == 'gmail':
-            self.sign_into_gmail()
+            pass
         elif self.return_email_info()[1] == 'outlook':
-            self.sign_into_outlook()
+            pass
         elif self.return_email_info()[1] == 'yahoo':
-            self.sign_into_yahoo()
-
-    def send_from_gmail(self) -> None:
-        pass
-
-    def send_from_outlook(self) -> None:
-        pass
-
-    # todo: find new message attribute
-    def send_from_yahoo(self) -> None:
-        self.browser.find_element(By.CSS_SELECTOR, '/d/compose/').click()
-
-    # todo: find "to:" attribute and submit sending address
-
-    # todo: find message attribute and submit email body
-
-    # todo: send email
-    def send_email(self) -> None:
-        if self.return_email_info()[1] == 'gmail':
-            self.send_from_gmail()
-        elif self.return_email_info()[1] == 'outlook':
-            self.send_from_outlook()
-        elif self.return_email_info()[1] == 'yahoo':
-            self.send_from_yahoo()
+            self.selenium_exception_loop(self.yahoo_method_calls)
 
 def main() -> None:
     command_line_emailer = commandLineEmailer()
     command_line_emailer.go_to_email_client()
-    command_line_emailer.sign_in()
-    command_line_emailer.send_email()
+    command_line_emailer.sign_in_and_send()
 
 if __name__ == "__main__":
     main()
