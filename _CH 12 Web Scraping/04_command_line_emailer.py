@@ -5,12 +5,12 @@
 # sys.argv[2] = password
 # sys.argv[3] = email body
 # sys.argv[4] = recipient email address
-#
-# incomplete! see todo:
 
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import sys
 import re
@@ -23,7 +23,6 @@ logging.info('Program start')
 # todo: write method calls for gmail and outlook / finish method calls for yahoo
 class commandLineEmailer:
     def __init__(self):
-
         self.browser = webdriver.Firefox()
         self.gmail_method_calls = ()
         self.outlook_method_calls = ()
@@ -33,7 +32,11 @@ class commandLineEmailer:
             lambda: self.browser.find_element(By.NAME, 'signin').click(),
             lambda: self.browser.find_element(By.NAME, 'password').send_keys(sys.argv[2]),
             lambda: self.browser.find_element(By.NAME, 'verifyPassword').click(),
-            lambda: self.browser.find_element(By.CSS_SELECTOR, 'Compose').click()
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label=Compose]").click(),
+            lambda: self.browser.find_element(By.ID, "message-to-field").send_keys(sys.argv[1]),
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label='Message body']").send_keys(sys.argv[3]),
+            lambda: self.browser.find_element(By.XPATH, '//span[text()="Send"]').click(),
+            lambda: WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable((By.XPATH, '//button[text()="Send"]'))).click()
         )
 
     def return_email_info(self) -> tuple:
@@ -65,8 +68,8 @@ class commandLineEmailer:
         for selenium_method_call in selenium_method_collection:
             while True:
                 try:
-                    time.sleep(2) # wait two seconds
-                    selenium_method_call() # invoke lambda functions
+                    time.sleep(2)  # wait two seconds
+                    selenium_method_call()
                     break
                 except NoSuchElementException:
                     continue
