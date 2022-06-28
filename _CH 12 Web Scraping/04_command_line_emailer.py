@@ -19,13 +19,29 @@ import logging
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
 logging.info('Program start')
 
-
-# todo: write method calls for gmail and outlook / finish method calls for yahoo
+# todo: write method calls for gmail
 class commandLineEmailer:
     def __init__(self):
         self.browser = webdriver.Firefox()
-        self.gmail_method_calls = ()
-        self.outlook_method_calls = ()
+        self.gmail_method_calls = (
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label='Email or phone']").send_keys(sys.argv[1]),
+            lambda: self.browser.find_element(By.XPATH, '//*[text()="Next"]').click(),
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label='Enter your password']").send_keys(sys.argv[2]),
+            lambda: self.browser.find_element(By.XPATH, '//*[text()="Next"]').click(),
+        )
+        self.outlook_method_calls = (
+            lambda: self.browser.find_element(By.XPATH, '//*[text()="Sign in"]').click(),
+            lambda: self.browser.find_element(By.NAME, 'loginfmt').send_keys(sys.argv[1]),
+            lambda: self.browser.find_element(By.ID, "idSIButton9").click(),
+            lambda: self.browser.find_element(By.NAME, 'passwd').send_keys(sys.argv[2]),
+            lambda: self.browser.find_element(By.ID, "idSIButton9").click(),
+            lambda: self.browser.find_element(By.ID, "idBtn_Back").click(),
+            lambda: self.browser.find_element(By.XPATH, '//span[text()="New message"]').click(),
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label='To']").send_keys(sys.argv[4]),
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label='Message body']").send_keys(sys.argv[3]),
+            lambda: self.browser.find_element(By.XPATH, '//*[text()="Send"]').click(),
+            lambda: self.browser.find_element(By.ID, "id__183").click()
+        )
         self.yahoo_method_calls = (
             lambda: self.browser.find_element(By.CLASS_NAME, 'signin').click(),
             lambda: self.browser.find_element(By.NAME, 'username').send_keys(self.return_email_info()[0]),
@@ -33,10 +49,10 @@ class commandLineEmailer:
             lambda: self.browser.find_element(By.NAME, 'password').send_keys(sys.argv[2]),
             lambda: self.browser.find_element(By.NAME, 'verifyPassword').click(),
             lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label=Compose]").click(),
-            lambda: self.browser.find_element(By.ID, "message-to-field").send_keys(sys.argv[1]),
+            lambda: self.browser.find_element(By.ID, "message-to-field").send_keys(sys.argv[4]),
             lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label='Message body']").send_keys(sys.argv[3]),
-            lambda: self.browser.find_element(By.XPATH, '//span[text()="Send"]').click(),
-            lambda: WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable((By.XPATH, '//button[text()="Send"]'))).click()
+            lambda: WebDriverWait(self.browser, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//button[text()="Send"]'))).click()
         )
 
     def return_email_info(self) -> tuple:
@@ -82,9 +98,9 @@ class commandLineEmailer:
         :return None:
         '''
         if self.return_email_info()[1] == 'gmail':
-            pass
+            self.selenium_exception_loop(self.gmail_method_calls)
         elif self.return_email_info()[1] == 'outlook':
-            pass
+            self.selenium_exception_loop(self.outlook_method_calls)
         elif self.return_email_info()[1] == 'yahoo':
             self.selenium_exception_loop(self.yahoo_method_calls)
 
