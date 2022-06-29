@@ -15,20 +15,10 @@ from selenium.common.exceptions import NoSuchElementException
 import sys
 import re
 import time
-import logging
-logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
-logging.info('Program start')
 
-# todo: write method calls for gmail
 class commandLineEmailer:
     def __init__(self):
         self.browser = webdriver.Firefox()
-        self.gmail_method_calls = (
-            lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label='Email or phone']").send_keys(sys.argv[1]),
-            lambda: self.browser.find_element(By.XPATH, '//*[text()="Next"]').click(),
-            lambda: self.browser.find_element(By.CSS_SELECTOR, "[aria-label='Enter your password']").send_keys(sys.argv[2]),
-            lambda: self.browser.find_element(By.XPATH, '//*[text()="Next"]').click(),
-        )
         self.outlook_method_calls = (
             lambda: self.browser.find_element(By.XPATH, '//*[text()="Sign in"]').click(),
             lambda: self.browser.find_element(By.NAME, 'loginfmt').send_keys(sys.argv[1]),
@@ -69,7 +59,6 @@ class commandLineEmailer:
     def go_to_email_client(self) -> None:
         EMAIL_CLIENTS = {
             'outlook': 'https://www.outlook.com/',
-            'gmail': 'https://www.gmail.com/',
             'yahoo': 'https://yahoomail.com/'
         }
         self.browser.get(EMAIL_CLIENTS[self.return_email_info()[1]])
@@ -97,9 +86,7 @@ class commandLineEmailer:
         method calls
         :return None:
         '''
-        if self.return_email_info()[1] == 'gmail':
-            self.selenium_exception_loop(self.gmail_method_calls)
-        elif self.return_email_info()[1] == 'outlook':
+        if self.return_email_info()[1] == 'outlook':
             self.selenium_exception_loop(self.outlook_method_calls)
         elif self.return_email_info()[1] == 'yahoo':
             self.selenium_exception_loop(self.yahoo_method_calls)
