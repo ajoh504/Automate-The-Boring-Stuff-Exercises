@@ -7,26 +7,44 @@ import os
 import sys
 import bs4
 import lxml
-import logging
-logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
-logging.info('Program start')
 
-def make_photo_dir():
-    os.makedirs(f'{sys.argv[1]}', exist_ok=True)
 
-def get_site_html_contents() -> list:
-    res = requests.get('https://unsplash.com/s/photos/' + sys.argv[1])
-    res.raise_for_status() # crash program if url not valid
-    soup = bs4.BeautifulSoup(res.text, "lxml")
-    return soup.select('.YVj9w')
+class imageDownloader:
+    def __init__(self):
+        self.keyword = sys.argv[1] # keyword to search for photos
+        self.photo_site_url = 'https://unsplash.com/s/photos/' # link is invalid if keyword is not appended
+        self.image_css_class = 'YVj9w'
 
-def download_images(list_of_image_elements):
-    pass
+    def parse_site_html_contents(self) -> bs4.element.ResultSet:
+        res = requests.get(self.photo_site_url + self.keyword)
+        res.raise_for_status() # crash program if url not valid
+        return bs4.BeautifulSoup(res.text, "lxml").select('.' + self.image_css_class)
+
+    def download_images(self) -> None:
+        '''
+        create dir to store photos using search keyword as the name. iterate over
+        beautiful soup result set. use 'src' to pass url into image_url
+        variable. use raise_for_status() to crash the program if url is not valid.
+        except the MissingSchema exception. download photos into dir with the keyword +
+        the index as the filename, + '.jpeg' as the file type.
+        '''
+        os.makedirs(self.keyword, exist_ok=True)  # make dir to store photos
+        for index, url in enumerate(self.parse_site_html_contents()):
+            image_url = url.get('src')
+            try:
+                res = requests.get(image_url)
+                res.raise_for_status()
+            except requests.exceptions.MissingSchema:
+                continue
+            image_file = open(os.path.join(self.keyword + '\\' + self.keyword + str(index) + '.jpeg'),'wb')
+            for chunk in res.iter_content(100000):
+                image_file.write(chunk)
+            image_file.close()
 
 
 def main():
-    make_photo_dir()
-    get_site_html_contents()
+    image_downloader = imageDownloader()
+    image_downloader.download_images()
 
 if __name__ == "__main__":
     main()
