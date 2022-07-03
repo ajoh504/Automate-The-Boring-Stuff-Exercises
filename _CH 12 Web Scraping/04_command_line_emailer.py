@@ -14,7 +14,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import sys
 import re
-import time
 
 class commandLineEmailer:
     def __init__(self):
