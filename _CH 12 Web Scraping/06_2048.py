@@ -7,10 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 import random
-import time
-import logging
-logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
-logging.info('Program start')
+
 
 class gameBot2048:
     def __init__(game):
@@ -22,11 +19,23 @@ class gameBot2048:
             Keys.ARROW_RIGHT
         )
 
+    def game_not_over(game) -> bool:
+        '''
+        :return bool: if "Game over!" text is displayed on screen, return False. Otherwise,
+        return True.
+        '''
+        try:
+            game_over_text = game.browser.find_element(By.XPATH, '//*[text()="Game over!"]')
+            if game_over_text.is_displayed():
+                return False
+        except NoSuchElementException:
+            return True
+
 
     def play_game(game):
         game.browser.get('https://play2048.co/')
-        while True:
-            time.sleep(1)
+        while game.game_not_over():
+            game.browser.implicitly_wait(1) # wait 1 second between each turn
             x = random.randint(0, 3)
             game.browser.find_element(By.CSS_SELECTOR, 'html').send_keys(game.moves[x])
 
@@ -37,11 +46,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-'''
-<div class="game-message game-over"><p>Game over!</p><div class="lower"><a class="keep-playing-button">Keep going</a>
-<a class="retry-button">Try again</a></div></div>
-
-'''
-
-
