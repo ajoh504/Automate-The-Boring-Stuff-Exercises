@@ -7,14 +7,11 @@ import sys
 import requests
 import bs4
 import lxml
-import logging
-logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
-logging.info('Program start')
+
 
 class linkVerification:
     def __init__(self):
         self.url = sys.argv[1]
-        self.css_selector = ''
         self.download_webpage = lambda: requests.get(self.url)
 
     def get_soup_object(self) -> bs4.BeautifulSoup:
@@ -22,14 +19,35 @@ class linkVerification:
         res.raise_for_status() # crash program if url not valid
         return bs4.BeautifulSoup(res.text, 'lxml')
 
-    # todo: finish func
-    def get_html_status_code(self) -> str:
+    def get_url_list(self) -> list:
+        '''
+        create beautiful soup object from self.get_soup_object() function call.
+        :return: use list comprehension to search the beautiful soup result set for
+        any items with the html anchor element. Then return a list of items with the
+        href attribute.
+        '''
         soup = self.get_soup_object()
-        logging.info(soup.findall('a'))
+        return [url.get('href') for url in soup.find_all('a')]
+
+
+    def print_broken_links(self) -> None:
+        '''
+        call self.get_url_list() to loop through items with the href attribute. 
+        try to download the items. Except MissingSchema if link is invalid. If 
+        link is valid and status_code returns an error, print the link and the
+        status code. 
+        '''
+        for string in self.get_url_list():
+            try:
+                res = requests.get(string)
+                if res.status_code != requests.codes.ok:
+                    print(res, string)
+            except requests.exceptions.MissingSchema: # skip non-link strings
+                continue
 
 def main():
     link_verification = linkVerification()
-    link_verification.get_html_status_code()
+    link_verification.print_broken_links()
 
 if __name__ == "__main__":
     main()
