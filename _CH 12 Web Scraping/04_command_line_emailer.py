@@ -73,7 +73,7 @@ class commandLineEmailer:
         for selenium_method_call in selenium_method_collection:
             while True:
                 try:
-                    time.sleep(2)  # wait two seconds
+                    self.browser.implicitly_wait(2) # wait two seconds
                     selenium_method_call()
                     break
                 except NoSuchElementException:
