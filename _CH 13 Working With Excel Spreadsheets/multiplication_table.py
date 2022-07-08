@@ -7,11 +7,16 @@ import sys
 import openpyxl
 from openpyxl.styles import Font
 
+def create_multiplication_table() -> None:
+    '''
+    Create two for loops to represent row and column numbers. Add 2 to each number to
+    account for skipping the 1x1 cell, and to account for the first row and column (i.e. the 
+    grid numbers). For cells with row and column numbers > 1, add multiplication table elements.
 
-def create_multiplication_table():
+    '''
     num = int(sys.argv[1])
-    wb = openpyxl.Workbook()  # create Workbook object
-    sheet = wb.active  # create Workbook sheet object
+    wb = openpyxl.Workbook() # create Workbook object
+    sheet = wb.active # create Workbook sheet object
     bold = Font(bold=True)
 
     for row_num in range(1, num + 2):
@@ -26,11 +31,8 @@ def create_multiplication_table():
                 sheet.cell(row=row_num, column=column_number).font = bold
             # create multiplication table
             elif column_number > 1 and row_num > 1:
-                sheet.cell(row=row_num, column=column_number).value = (row_num - 1) * (
-                    column_number - 1
-                )
-    wb.save("mult_table_" + str(num) + "x" + str(num) + ".xlsx")
+                sheet.cell(row=row_num, column=column_number).value = (row_num - 1) * (column_number - 1)
+    wb.save('mult_table_' + str(num) + 'x' + str(num) + '.xlsx')
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     create_multiplication_table()
