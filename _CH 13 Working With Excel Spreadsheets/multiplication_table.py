@@ -12,7 +12,6 @@ def create_multiplication_table() -> None:
     Create two for loops to represent row and column numbers. Add 2 to each number to
     account for skipping the 1x1 cell, and to account for the first row and column (i.e. the 
     grid numbers). For cells with row and column numbers > 1, add multiplication table elements.
-
     '''
     num = int(sys.argv[1])
     wb = openpyxl.Workbook() # create Workbook object
