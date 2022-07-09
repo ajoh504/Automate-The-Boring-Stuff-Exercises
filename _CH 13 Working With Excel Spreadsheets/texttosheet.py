@@ -6,25 +6,27 @@
 import sys
 import openpyxl
 
+
 class TextToSheet:
     def __init__(self, text_files: list):
-        '''
+        """
         get_lines() returns a list of lines from a .txt file
 
         get_list_of_lines() calls get_lines() and returns a list of nested
         lists. Each nested list contains the list of lines from get_lines()
-        '''
-        self.get_lines = lambda file : open(file, 'r').readlines()
-        self.get_list_of_lines = lambda: [self.get_lines(file) for file in self.text_files]
-        self.text_files = text_files # sys.orig_argv minus the first two args
-        self.wb = openpyxl.Workbook() # Excel workbook object
-        self.sheet = self.wb.active # Excel sheet object
-
-
+        """
+        self.get_lines = lambda file: open(file, "r").readlines()
+        self.get_list_of_lines = lambda: [
+            self.get_lines(file) for file in self.text_files
+        ]
+        self.text_files = text_files  # sys.orig_argv minus the first two args
+        self.wb = openpyxl.Workbook()  # Excel workbook object
+        self.sheet = self.wb.active  # Excel sheet object
 
     def write_to_sheet(self):
         pass
 
+
 if __name__ == "__main__":
-    text_to_sheet = TextToSheet(sys.orig_argv[2:]) # skip the first two sys args
+    text_to_sheet = TextToSheet(sys.orig_argv[2:])  # skip the first two sys args
     text_to_sheet.write_to_sheet()
