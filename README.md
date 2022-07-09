@@ -5,7 +5,7 @@ NOTE: Some solutions contain concepts not covered in the book.
 
 A big thank you to the author for the resources contained in this book, which can be [read for free](https://automatetheboringstuff.com/), or purchased directly from the publisher, [No Starch Press](https://nostarch.com/automatestuff2). 
 
-The author occasionally posts free/discounted download codes over on the subreddit [r/learnpython](https://www.reddit.com/r/learnpython/). The download codes are for the [accompanying video series](https://www.udemy.com/course/automate/learn/lecture/3309062#overview) 
+The author occasionally posts free/discounted download codes on the subreddit [r/learnpython](https://www.reddit.com/r/learnpython/). The download codes are for the [accompanying video series](https://www.udemy.com/course/automate/learn/lecture/3309062#overview) 
 
 As mentioned on the [author's website](https://inventwithpython.com/), the book is free to read and share, and is licensed under a Creative Commons license. 
 
