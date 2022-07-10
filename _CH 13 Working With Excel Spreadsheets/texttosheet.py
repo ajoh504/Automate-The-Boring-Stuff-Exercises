@@ -5,6 +5,7 @@
 
 import sys
 import openpyxl
+from openpyxl.utils import get_column_letter
 
 
 class TextToSheet:
@@ -23,8 +24,11 @@ class TextToSheet:
         self.wb = openpyxl.Workbook()  # Excel workbook object
         self.sheet = self.wb.active  # Excel sheet object
 
-    def write_to_sheet(self):
-        pass
+    def write_to_sheet(self) -> None:
+        for i, list in enumerate(self.get_list_of_lines()):
+            for j, line in enumerate(list):
+                self.sheet[get_column_letter(i + 1) + str(j + 1)].value = line
+        self.wb.save("text_added.xlsx")
 
 
 if __name__ == "__main__":
