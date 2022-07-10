@@ -8,15 +8,13 @@ import openpyxl
 from openpyxl.utils import get_column_letter
 
 
-def write_sheet_to_file() -> None:
+def write_sheet_to_file(excel_file: str) -> None:
     """
-    sys.argv[1] must contain an Excel file name.
-
-    :exception TypeError: None values in Excel cells will throw a TypeError
+    :except TypeError: None values in Excel cells will throw a TypeError
     in the open() function. Except the TypeError and write '' to file instead
     of None.
     """
-    wb = openpyxl.load_workbook(sys.argv[1])
+    wb = openpyxl.load_workbook(excel_file)
     sheet = wb.active
     for column in range(1, sheet.max_column + 1):
         for row in range(1, sheet.max_row + 1):
@@ -29,4 +27,4 @@ def write_sheet_to_file() -> None:
 
 
 if __name__ == "__main__":
-    write_sheet_to_file()
+    write_sheet_to_file(sys.argv[1])
