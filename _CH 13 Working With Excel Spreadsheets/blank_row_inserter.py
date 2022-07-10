@@ -6,7 +6,7 @@
 
 import sys
 import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
+from openpyxl.utils import get_column_letter
 
 
 class BlankRowInserter:
@@ -24,33 +24,28 @@ class BlankRowInserter:
 
     def get_new_cells(self) -> dict:
         """
-        Use nested loops to append Excel cell coordinates/values to dictionary keys/values. If the
-        iterator "row" == the blank row starting point (or) if "row" < (blank row
-        starting point + blank row qty), then add None as values to create blank lines. Append all
-        the rest of the Excel cell values to the new_cells dictionary.
+        Append Excel cell coordinates/values to dictionary keys/values. At
+        the blank row starting pount, add None as values to create blank lines.
+        Continue adding None for as many times as designated by self.qty.
+        Append all the rest of the Excel cell values to the new_cells dictionary.
 
         :return new_cells: dictionary with blank rows added as None value type
         """
         new_cells = {}
-        for row in range(
-            1,
-            self.sheet.max_row
-            + self.qty
-            + 1,  # add 1 to account for non-zero starting index
-        ):
-            for column in range(1, self.sheet.max_column + 1):
+        for i in range(1, self.sheet.max_row + self.qty + 1):
+            for j in range(1, self.sheet.max_column + 1):
                 # add values before blank rows
-                if row < self.start:
-                    new_cells[get_column_letter(column) + str(row)] = self.sheet[
-                        get_column_letter(column) + str(row)
+                if i < self.start:
+                    new_cells[get_column_letter(j) + str(i)] = self.sheet[
+                        get_column_letter(j) + str(i)
                     ].value
                 # add blank rows
-                elif row == self.start or row < (self.start + self.qty):
-                    new_cells[get_column_letter(column) + str(row)] = None
+                elif i == self.start or i < (self.start + self.qty):
+                    new_cells[get_column_letter(j) + str(i)] = None
                 # add values after blank rows
-                elif row >= self.start + self.qty:
-                    new_cells[get_column_letter(column) + str(row)] = self.sheet[
-                        get_column_letter(column) + str(row - self.qty)
+                elif i >= self.start + self.qty:
+                    new_cells[get_column_letter(j) + str(i)] = self.sheet[
+                        get_column_letter(j) + str(i - self.qty)
                     ].value
         return new_cells
 
@@ -59,10 +54,10 @@ class BlankRowInserter:
         Loop through row and column numbers. Append new_cells values to Excel
         cells. Save as new file.
         """
-        for row in range(1, self.sheet.max_row + self.qty + 1):
-            for column in range(1, self.sheet.max_column + 1):
-                self.sheet[get_column_letter(column) + str(row)].value = new_cells[
-                    get_column_letter(column) + str(row)
+        for i in range(1, self.sheet.max_row + self.qty + 1):
+            for j in range(1, self.sheet.max_column + 1):
+                self.sheet[get_column_letter(j) + str(i)].value = new_cells[
+                    get_column_letter(j) + str(i)
                 ]
         self.wb.save(self.excel_file[0:-5] + "_edited" + ".xlsx")
 
