@@ -26,4 +26,5 @@ def product_checker():
         pass
 
 
-product_checker()
+if __name__ == "__main__":
+    product_checker()
