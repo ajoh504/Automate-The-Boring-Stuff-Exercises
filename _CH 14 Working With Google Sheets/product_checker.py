@@ -19,7 +19,7 @@ def product_checker():
             ) == int(ss[0].getRow(row_num + 1)[2]):
                 print(
                     "Row number "
-                    + str(row_num)
+                    + str(row_num + 1)
                     + " returned an error. Check your math!"
                 )
     except ValueError:
