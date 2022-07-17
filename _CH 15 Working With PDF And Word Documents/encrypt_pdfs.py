@@ -10,6 +10,8 @@
 
 import os
 import sys
+from typing import Callable
+
 import PyPDF2
 
 
@@ -21,44 +23,49 @@ class EncryptPDFs:
         self.delete_call = self.delete_file
 
     def encrypt_pdf(self, file: str) -> None:
-        file_object = open(file, 'rb')
+        file_object = open(file, "rb")
         reader = PyPDF2.PdfFileReader(file_object)
-        writer = PyPDF2.PdfFileWriter()
-        for page_num in range(reader.numPages):
-            writer.addPage(reader.getPage(page_num))
-        writer.encrypt(self.password)
-        result_pdf = open(file.split('.')[0] + '_encrypted.pdf', 'wb')
-        writer.write(result_pdf)
-        # if self.check_encrypted_file(file, reader) is None:
-        #     print('Warning. ' + file + ' was not encrypted.')
+        if not reader.isEncrypted:
+            writer = PyPDF2.PdfFileWriter()
+            for page_num in range(reader.numPages):
+                writer.addPage(reader.getPage(page_num))
+            writer.encrypt(self.password)
+            result_pdf = open(file.split(".")[0] + "_encrypted.pdf", "wb")
+            writer.write(result_pdf)
+            # if self.decryption_check(file, reader) is None:
+            #     print('Warning. ' + file + ' was not encrypted.')
+            file_object.close()
+            result_pdf.close()
+        self.encryption_check(file)
         file_object.close()
-        result_pdf.close()
 
-
-    def walk_dir(self, function_call) -> None:
-        print('Searching for .pdf files in: ' + '\"' + self.dir_to_search + '\"')
+    def walk_dir(self, function_call: Callable) -> None:
+        print("Searching for .pdf files in: " + '"' + self.dir_to_search + '"')
         for folder, sub_folders, file_list in os.walk(self.dir_to_search):
             for file in file_list:
-                if file.split('.')[-1].lower() == 'pdf':
+                if file.split(".")[-1].lower() == "pdf":
                     function_call(file)
 
-    # def check_encrypted_file(self, file: str, reader: PyPDF2.pdf.PdfFileReader) -> bool:
-    #     if reader.isEncrypted is not None:
-    #         print(file + ' has been encrypted.')
-    #         return True
-    #     else:
-    #         return False
+    def encryption_check(self, file: str) -> int:
+        file_object = open(file, "rb")
+        reader = PyPDF2.PdfFileReader(file_object)
+        if reader.isEncrypted:
+            x = reader.decrypt(self.password)
+            file_object.close()
+            return x
+        file_object.close()
+        return -1
 
-    def delete_file(self, file: str):
-        file_object = open(file, 'rb')
+    def delete_file(self, file: str) -> None:
+        file_object = open(file, "rb")
         reader = PyPDF2.PdfFileReader(file_object)
         if not reader.isEncrypted:
             file_object.close()
             os.remove(file)
 
-    def main(self):
+    def main(self) -> None:
         self.walk_dir(self.encryption_call)
-        self.walk_dir(self.delete_call)
+        # self.walk_dir(self.delete_call)
 
 
 if __name__ == "__main__":
