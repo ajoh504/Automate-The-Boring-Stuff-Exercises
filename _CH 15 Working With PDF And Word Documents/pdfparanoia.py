@@ -5,8 +5,7 @@
 #                  encryption succeeded by attempting to read and decrypt the
 #                  files. Prompt the user to delete the older unencrypted files.
 #
-#                  USAGE:
-#                  sys.argv[1] = password
+#           USAGE: sys.argv[1] = password
 #                  sys.argv[2] = filepath to search for PDFs
 
 
@@ -20,13 +19,13 @@ class EncryptPDFs:
     def __init__(self):
         self.password = sys.argv[1]
         self.dir_to_search = sys.argv[2]
-        self.encryption_call = self.encrypt_pdf # variable contains callable
-        self.delete_call = self.delete_file # variable contains callable
-        self.encryption_check_call = self.encryption_checker # variable contains callable
+        self.encryption_call = self.encrypt_pdf
+        self.delete_call = self.delete_file
+        self.encryption_check_call = self.encryption_checker
 
     def encrypt_pdf(self, file: str) -> None:
         """
-        :param file: Input PDF file name from the calling function (walk_dir()).
+        :param file: Input PDF file name from the calling function (search_for_pdf()).
         If the PDF is not encrypted, create a PDFFileWriter object to encrypt
         and save it as a new file. Encrypted files will be skipped.
         """
@@ -43,13 +42,15 @@ class EncryptPDFs:
             result_pdf.close()
         file_object.close()
 
-    def walk_dir(self, function_call: Callable) -> None:
+    @staticmethod
+    def search_for_pdf(dir_to_search: str, function_call: Callable) -> None:
         """
+        :param dir_to_search: input directory tree to walk through
         :param function_call: Input callable as argument and pass it the file variable.
         Callable argument acts on all PDF files in the given directory tree.
         """
-        print("Searching for .pdf files in: " + '"' + self.dir_to_search + '"')
-        for folder, sub_folders, file_list in os.walk(self.dir_to_search):
+        print(f"Searching for .pdf files in: {dir_to_search}")
+        for folder, sub_folders, file_list in os.walk(dir_to_search):
             for file in file_list:
                 if file.split(".")[-1].lower() == "pdf":
                     function_call(file)
@@ -78,13 +79,13 @@ class EncryptPDFs:
             os.remove(file)
 
     def main(self) -> None:
-        self.walk_dir(self.encryption_call)
+        self.search_for_pdf(self.dir_to_search, self.encryption_call)
         print("\nSearching for encrypted files to check.\n")
-        self.walk_dir(self.encryption_check_call)
+        self.search_for_pdf(self.dir_to_search, self.encryption_check_call)
         while True:
             choice = input("\nDo you wish to delete all unencrypted files? Y/N\n")
             if choice.upper() == "Y":
-                self.walk_dir(self.delete_call)
+                self.search_for_pdf(self.dir_to_search, self.delete_call)
                 break
             elif choice.upper() == "N":
                 break
