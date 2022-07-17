@@ -19,21 +19,21 @@ def decrypt_pdf_file(file: str) -> None:
     the user for the encryption password. If the password is correct, decrypt it
     the file and save it. If the password is incorrect, warn the user and continue.
     """
-    file_object = open(file, 'rb')
+    file_object = open(file, "rb")
     reader = PyPDF2.PdfFileReader(file_object)
     if reader.isEncrypted:
-        password = input(f'Please enter the password to decrypt {file}\n')
+        password = input(f"Please enter the password to decrypt {file}\n")
         if reader.decrypt(password) == 0:
-            print(f'Password invalid. {file} was not decrypted\n')
+            print(f"Password invalid. {file} was not decrypted\n")
         elif reader.decrypt(password) == 1:
-            print(f'Decrypting {file}')
+            print(f"Decrypting {file}")
             writer = PyPDF2.PdfFileWriter()
             for page_num in range(reader.numPages):
                 writer.addPage(reader.getPage(page_num))
-            result_pdf = open(file.split('.')[0] + '_decrypted.pdf', 'wb')
+            result_pdf = open(file.split(".")[0] + "_decrypted.pdf", "wb")
             writer.write(result_pdf)
             result_pdf.close()
-            print(f'{file} has been decrypted and saved.')
+            print(f"{file} has been decrypted and saved.")
     file_object.close()
 
 
