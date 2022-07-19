@@ -6,42 +6,57 @@
 #          USAGE: sys.argv[1] = .txt file containing guest names
 #                 sys.argv[2] = blank .docx file with pre-set styles
 #                 using Python version 3.8.10 and python-docx version 0.8.10
-# INCOMPLETE -- SEE TODO
+
 
 import sys
 import docx
 
-guest_names = sys.argv[1]
-blank_docx = sys.argv[2]
 
+class CustomInvitations:
+    def __init__(self):
+        """
+        self.guests_lists: Callable function to return a list of lines from
+        sys.argv[1] and remove any "\n" characters.
+        """
+        self.invitation = (
+            "It would be a pleasure to have the company of",
+            "",  # placeholder for guest name
+            "at 11010 Memory Lane on the Evening of",
+            "April 1st",
+            "at 7 o'clock",
+        )
+        self.guest_names = sys.argv[1]
+        self.blank_docx = sys.argv[2]
+        self.guests_list = lambda: [
+            line.split("\n")[0]
+            for line in open(self.guest_names, "r").readlines()
+            if "\n" in line
+        ]
 
-# todo: write function to create paragraphs w/ custom styles
-# todo: debug make_invitation() 
-def make_invitation(text_file: str, docx_file: str) -> None:
-    message = (
-        'It would be a pleasure to have the company of',
-        '',
-        'at 11010 Memory Lane on the Evening of',
-        "April 1st",
-        'at 7 o\'clock'
-    )
-    guests_list = open(text_file).readlines()
-    doc = docx.Document(docx_file)
-    total_paragraphs = len(message) * len(guests_list)
-    accumulator = 0
-    for i in range(total_paragraphs):
-        for guest in guests_list:
-            for j, line in enumerate(message):
+    def make_invitations(self):
+        """
+        Loop through guests_lists() and invitation. Place guest's name at index 1.
+        For all other cases, add "line" with the appropriate Custom Style. Keep
+        track of paragraph count in order to determine where the line break is
+        placed.
+        """
+        doc = docx.Document(self.blank_docx)
+        paragraph_count = 0
+        for i, guest in enumerate(self.guests_list()):
+            for j, line in enumerate(self.invitation):
                 if j == 1:
-                    doc.paragraphs[i + accumulator].runs[0].text = guest
-                else:
-                    doc.paragraphs[i + accumulator].runs[0].text = line
-            doc.paragraphs[4].runs[0].add_break(docx.enum.text.WD_BREAK.PAGE)
-            accumulator += j
-    doc.save('invitations.docx')
+                    doc.add_paragraph(guest, "Custom Style 2")
+                elif j % 2 == 0:
+                    doc.add_paragraph(line, "Custom Style 1")
+                elif j % 2 != 0:
+                    doc.add_paragraph(line, "Custom Style 2")
+                paragraph_count += 1
+            doc.paragraphs[paragraph_count].runs[0].add_break(
+                docx.enum.text.WD_BREAK.PAGE
+            )
+        doc.save("invitations.docx")
 
 
 if __name__ == "__main__":
-    make_invitation(guest_names, blank_docx)
-
-
+    custom_invitations = CustomInvitations()
+    custom_invitations.make_invitations()
