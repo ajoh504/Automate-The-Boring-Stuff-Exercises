@@ -1,6 +1,6 @@
 #! python3
 # prettyprintstopwatch.py - Take the stopwatch program from CH 17 and format
-# it to print neatly to the console
+#                           it to print neatly to the console.
 
 import time
 import pyperclip
