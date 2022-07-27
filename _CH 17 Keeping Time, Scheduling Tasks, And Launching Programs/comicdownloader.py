@@ -3,7 +3,6 @@
 #                      a daily task to check for the latest comic. If the latest
 #                      comic is not in the download directory, then download it.
 
-# todo: write ScriptConfig class functions
 # todo: write main() logic flow
 # todo: check if comics have been downloaded previously?
 # todo: edit docstrings for clarity
@@ -14,6 +13,7 @@ import lxml
 import threading
 import bs4
 import requests
+import subprocess
 import logging
 
 logging.basicConfig(
@@ -22,9 +22,9 @@ logging.basicConfig(
 logging.info("Program start")
 
 
-class ScriptConfig:
-    def __init__(self):
-        pass
+class XkcdDownloader:
+    def __init__(self, comic_num: int):
+        self.comic_num = comic_num
 
     def make_bat_file(self):
         """
@@ -36,16 +36,17 @@ class ScriptConfig:
                 bat_file.write(f"py.exe {os.getcwd()}\\comicdownloader.py")
 
     def schedule_task(self):
-        """Check to see if scheduled task exists. If not, create it."""
-        os.system(
-            f'SCHTASKS /Create /SC DAILY /ST 20:00 /TN "Download XKCD" /TR "{os.getcwd()}\\download_xkcd.bat"'
-        )
-        # SCHTASKS /Create /SC DAILY /ST 20:00 /TN "Download XKCD" /TR "CWD\download_xkcd.bat"
-
-
-class XkcdDownloader:
-    def __init__(self, comic_num: int):
-        self.comic_num = comic_num
+        """
+        In the try statement, run subprocess.check_output() to see if the scheduled
+        task exists. If it does not exist, create the scheduled task inside the
+        except clause.
+        """
+        try:
+            subprocess.check_output('SCHTASKS /Query /TN "Download XKCD"')
+        except subprocess.CalledProcessError:
+            subprocess.run(
+                f'SCHTASKS /Create /SC DAILY /ST 20:00 /TN "Download XKCD" /TR "{os.getcwd()}\\download_xkcd.bat"'
+            )
 
     def get_soup_object(self) -> bs4.BeautifulSoup:
         """Given a comic number, download and parse its html contents from xkcd.com."""
@@ -86,8 +87,8 @@ class XkcdDownloader:
 
 def main():
     os.makedirs("xkcd", exist_ok=True)  # store comics in ./xkcd
-    ScriptConfig().make_bat_file()  # First checks if .bat file exists
-    ScriptConfig().schedule_task()  # First checks if task exists
+    XkcdDownloader().make_bat_file()  # First checks if .bat file exists
+    XkcdDownloader().schedule_task()  # First checks if task exists
     # XkcdDownloader(46).download_image()
 
 
