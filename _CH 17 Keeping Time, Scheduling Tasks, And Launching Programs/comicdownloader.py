@@ -1,9 +1,7 @@
 #!python3
-# comicdownloader.py - Download all webcomics from https://xkcd.com/ and schedule
-#                      a daily task to check for the latest comic. If the latest
+# comicdownloader.py - Download the latest comic from https://xkcd.com/ and schedule
+#                      a daily task to check for the any recent comics. If the latest
 #                      comic is not in the download directory, then download it.
-
-# todo: write main() logic flow
 
 
 import os
@@ -12,17 +10,26 @@ import threading
 import bs4
 import requests
 import subprocess
-import logging
-
-logging.basicConfig(
-    level=logging.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s"
-)
-logging.info("Program start")
 
 
 class XkcdDownloader:
-    def __init__(self, comic_num: int):
-        self.comic_num = self.get_recent_comic_num
+    def __init__(self):
+        self.comic_num = self.get_latest_comic_num()
+
+    def get_latest_comic_num(self):
+        """
+        Download and parse the html contents from "https://xkcd.com/. Since the website uses
+        a "previous" button, search for the previous image element using the attributes
+        {"rel": "prev"}. The previous comic number is stored with the href attribute. Strip the
+        extra "/" from this number, and return that number plus 1 to get the latest comic number.
+
+        :return int: number referencing the latest comic from XKCD
+        """
+        res = requests.get("https://xkcd.com/")
+        soup = bs4.BeautifulSoup(res.text, "lxml")
+        prev_image_elem = soup.find_all("a", attrs={"rel": "prev"})
+        prev_comic_num = prev_image_elem[0].get("href").strip("/")
+        return int(prev_comic_num) + 1
 
     def get_soup_object(self) -> bs4.BeautifulSoup:
         """
@@ -32,9 +39,7 @@ class XkcdDownloader:
 
         :return: A beautiful soup object containing the html contents of the image webpage.
         """
-        print(f"Downloading page https://xkcd.com/{self.comic_num}...")
         res = requests.get(f"https://xkcd.com/{self.comic_num}")
-        logging.info("res.text = " + res.text)
         res.raise_for_status()
         return bs4.BeautifulSoup(res.text, "lxml")
 
@@ -49,16 +54,10 @@ class XkcdDownloader:
             image url.
         """
         image_elem = self.get_soup_object().select("#comic img")
-        # < a
-        # rel = "prev"
-        # href = "/2649/"
-        # accesskey = "p" > & lt;
-        # Prev < / a >
         if image_elem == []:
             pass
         else:
             image_url = image_elem[0].get("src")
-            print(f"Downloading image from {image_url}")
             res = requests.get(f"https:{image_url}")
             res.raise_for_status()
             return res, image_url
@@ -70,11 +69,12 @@ class XkcdDownloader:
         save the file, then close it.
         """
         res = self.download_image()[0]  # requests object
-        image_url = self.download_image()[1]  # image url
+        image_url = self.download_image()[1]  
         image_file = open(
             os.path.join("xkcd", f"{self.comic_num}_{os.path.basename(image_url)}"),
             "wb",
         )
+        print(f"Saving image # {self.comic_num} {os.path.basename(image_url)}")
         for chunk in res.iter_content(100000):
             image_file.write(chunk)
         image_file.close()
@@ -108,7 +108,7 @@ def main():
     os.makedirs("xkcd", exist_ok=True)  # store comics in ./xkcd
     XkcdDownloader.make_bat_file()  # First checks if .bat file exists
     XkcdDownloader.schedule_task()  # First checks if task exists
-    XkcdDownloader(46).save_image()
+    XkcdDownloader().save_image()
 
 
 if __name__ == "__main__":
