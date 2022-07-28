@@ -1,6 +1,6 @@
 #!python3
 # comicdownloader.py - Download the latest comic from https://xkcd.com/ and schedule
-#                      a daily task to check for the most recent comic. If the latest
+#                      a daily task to check for the any recent comics. If the latest
 #                      comic is not in the download directory, then download it.
 
 
@@ -69,7 +69,7 @@ class XkcdDownloader:
         save the file, then close it.
         """
         res = self.download_image()[0]  # requests object
-        image_url = self.download_image()[1]  
+        image_url = self.download_image()[1]
         image_file = open(
             os.path.join("xkcd", f"{self.comic_num}_{os.path.basename(image_url)}"),
             "wb",
@@ -87,7 +87,7 @@ class XkcdDownloader:
         """
         if not os.path.isfile(f"{os.getcwd()}\\download_xkcd.bat"):
             with open("download_xkcd.bat", "w") as bat_file:
-                bat_file.write(f"py.exe {os.getcwd()}\\comicdownloader.py")
+                bat_file.write(f"py.exe \"{os.getcwd()}\\comicdownloader.py\"")
 
     @staticmethod
     def schedule_task():
