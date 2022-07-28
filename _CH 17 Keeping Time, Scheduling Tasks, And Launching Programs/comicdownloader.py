@@ -99,8 +99,8 @@ class XkcdDownloader:
         try:
             subprocess.check_output('SCHTASKS /Query /TN "Download XKCD"')
         except subprocess.CalledProcessError:
-            subprocess.run(
-                f'SCHTASKS /Create /SC DAILY /ST 20:00 /TN "Download XKCD" /TR "{os.getcwd()}\\download_xkcd.bat"'
+            os.system(
+                f'SCHTASKS /Create /SC DAILY /ST 20:00 /TN "Download XKCD" /TR \"\'{os.getcwd()}\\download_xkcd.bat\'\"'
             )
 
 
