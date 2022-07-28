@@ -1,6 +1,6 @@
 #!python3
 # comicdownloader.py - Download the latest comic from https://xkcd.com/ and schedule
-#                      a daily task to check for the any recent comics. If the latest
+#                      a daily task to check for the most recent comic. If the latest
 #                      comic is not in the download directory, then download it.
 
 
